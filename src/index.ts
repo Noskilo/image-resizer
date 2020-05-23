@@ -5,6 +5,7 @@ import { join, extname } from "path";
 import { Storage } from "@google-cloud/storage";
 import sharp from "sharp";
 import fs from "fs-extra";
+import { v4 as uuidv4 } from "uuid";
 
 const gcs = new Storage();
 const bucket = gcs.bucket(process.env.BUCKET);
@@ -20,8 +21,11 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
   const uploadImages = (req.files as Express.Multer.File[])
     .map((file) => {
+      // Generate a unique ID for each image
+      const fileId = uuidv4();
+
       // Create directory to dump resized images
-      const resizeDir = join(workingDir, "resize", file.filename);
+      const resizeDir = join(workingDir, "resize", fileId);
       fs.ensureDirSync(resizeDir);
 
       // Return array of bucket upload promises
@@ -38,8 +42,13 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
         // Map to bucket upload promise
         return bucket.upload(resizedPath, {
-          destination: `images/${file.filename}/${resizedName}`,
+          destination: `images/${fileId}/${resizedName}`,
           gzip: true,
+          metadata: {
+            metadata: {
+              firebaseStorageDownloadTokens: fileId,
+            },
+          },
         });
       });
     })
