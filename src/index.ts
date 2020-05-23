@@ -18,11 +18,13 @@ const upload = multer({ dest: workingDir });
 
 app.post("/images", upload.array("images", 12), async (req, res) => {
   const sizes = [64, 128, 256, 512];
+  const fileIds = [];
 
   const uploadImages = (req.files as Express.Multer.File[])
     .map((file) => {
       // Generate a unique ID for each image
       const fileId = uuidv4();
+      fileIds.push(fileId);
 
       // Create directory to dump resized images
       const resizeDir = join(workingDir, "resize", fileId);
@@ -60,7 +62,10 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
   // Upload images to bucket
   await Promise.all(uploadImages);
   await fs.remove(workingDir);
-  res.send("Images Uploaded!");
+  res.send({
+    sizes,
+    ids: fileIds,
+  });
 });
 
 app.listen(port, () =>
