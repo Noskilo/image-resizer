@@ -1,0 +1,19 @@
+{
+  "name": "image-resizer",
+  "version": "1.0.0",
+  "description": "Resizes an image to varying widths before committing into a storage bucket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Noskilo/image-resizer.git"
+  },
+  "author": "Michael Iskandarani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Noskilo/image-resizer/issues"
+  },
+  "homepage": "https://github.com/Noskilo/image-resizer#readme"
+}
