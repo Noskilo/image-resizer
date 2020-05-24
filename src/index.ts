@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { tmpdir } from "os";
 import multer from "multer";
-import { join } from "path";
+import { join, parse } from "path";
 import { Storage } from "@google-cloud/storage";
 import sharp from "sharp";
 import fs from "fs-extra";
@@ -20,14 +20,33 @@ const port = process.env.PORT ?? 3000;
 const upload = multer({ dest: workingDir });
 
 app.post("/images", upload.array("images", 12), async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    res.send({
+      sizes: [],
+      images: [],
+    });
+    return;
+  }
+
   const sizes = [64, 128, 256, 512];
-  const fileIds = [];
+  const images: {
+    id: string;
+    mimeType: string;
+    name: string;
+    location: string;
+  }[] = [];
 
   const uploadImages = (req.files as Express.Multer.File[])
     .map((file) => {
       // Generate a unique ID for each image
       const fileId = uuidv4();
-      fileIds.push(fileId);
+      const resizedLocation = `images/${fileId}/`;
+      images.push({
+        id: fileId,
+        mimeType: file.mimetype,
+        name: parse(file.originalname).name,
+        location: resizedLocation,
+      });
 
       // Create directory to dump resized images
       const resizeDir = join(workingDir, "resize", fileId);
@@ -47,7 +66,7 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
         // Map to bucket upload promise
         return bucket.upload(resizedPath, {
-          destination: `images/${fileId}/${resizedName}`,
+          destination: resizedLocation + resizedName,
           gzip: true,
           contentType: file.mimetype,
           metadata: {
@@ -65,10 +84,10 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
   // Upload images to bucket
   await Promise.all(uploadImages);
-  await fs.remove(workingDir);
+  // await fs.remove(workingDir);
   res.send({
     sizes,
-    ids: fileIds,
+    images,
   });
 });
 
