@@ -1,11 +1,14 @@
+import dotenv from "dotenv";
 import express from "express";
 import { tmpdir } from "os";
 import multer from "multer";
-import { join, extname } from "path";
+import { join } from "path";
 import { Storage } from "@google-cloud/storage";
 import sharp from "sharp";
 import fs from "fs-extra";
 import { v4 as uuidv4 } from "uuid";
+
+dotenv.config();
 
 const gcs = new Storage();
 const bucket = gcs.bucket(process.env.BUCKET);
@@ -32,7 +35,7 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
       // Return array of bucket upload promises
       return sizes.map(async (size) => {
-        const resizedName = `${size}w${extname(file.originalname)}`;
+        const resizedName = `${size}w`;
         const resizedPath = join(resizeDir, resizedName);
 
         // Resize images to temporary file
@@ -46,6 +49,7 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
         return bucket.upload(resizedPath, {
           destination: `images/${fileId}/${resizedName}`,
           gzip: true,
+          contentType: file.mimetype,
           metadata: {
             metadata: {
               firebaseStorageDownloadTokens: fileId,
