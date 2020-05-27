@@ -1,5 +1,10 @@
 runtime: nodejs10
 service: image-resizer
 
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
+
 includes:
   - env-variables.yaml

@@ -8,7 +8,7 @@ import sharp from "sharp";
 import fs from "fs-extra";
 import { v4 as uuidv4 } from "uuid";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") dotenv.config();
 
 const gcs = new Storage();
 const bucket = gcs.bucket(process.env.BUCKET);
