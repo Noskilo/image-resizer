@@ -11,7 +11,7 @@ npm run prepare
 Create `env-variables.yaml` in root directory and define your storage bucket:
 ```yaml
 env_variables:
-	BUCKET: PROJECT_ID.appspot.com
+ BUCKET: PROJECT_ID.appspot.com
 ```
 ## Production
 Make a `multipart/form-data` POST request to `
