@@ -19,6 +19,9 @@ const port = process.env.PORT ?? 3000;
 
 const upload = multer({ dest: workingDir });
 
+// Resizes an array of image files from a multipart/form POST request
+// Uploads resized images to GCP storage
+// Responds with sizes and image data
 app.post("/images", upload.array("images", 12), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     res.send({
@@ -38,7 +41,7 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 
   const uploadImages = (req.files as Express.Multer.File[])
     .map((file) => {
-      // Generate a unique ID for each image
+
       const fileId = uuidv4();
       const resizedLocation = `images/${fileId}/`;
       images.push({
@@ -48,23 +51,23 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
         location: resizedLocation,
       });
 
-      // Create directory to dump resized images
+
       const resizeDir = join(workingDir, "resize", fileId);
       fs.ensureDirSync(resizeDir);
 
-      // Return array of bucket upload promises
+
       return sizes.map(async (size) => {
         const resizedName = `${size}w`;
         const resizedPath = join(resizeDir, resizedName);
 
-        // Resize images to temporary file
+
         await sharp(file.path)
           .resize({
             width: size,
           })
           .toFile(resizedPath);
 
-        // Map to bucket upload promise
+
         return bucket.upload(resizedPath, {
           destination: resizedLocation + resizedName,
           gzip: true,
@@ -78,13 +81,12 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
       });
     })
     .reduce((prev, curr) => {
-      // Flatten array
       return prev.concat(curr);
     });
 
-  // Upload images to bucket
+
   await Promise.all(uploadImages);
-  // await fs.remove(workingDir);
+
   res.send({
     sizes,
     images,
