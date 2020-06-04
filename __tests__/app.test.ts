@@ -8,11 +8,11 @@ test("bucket is defined", () => {
 });
 
 describe("resizing images", () => {
-  test("POST request to /images resizes all images", async () => {
+  test("POST request to /images resizes all images", async (done) => {
     const { status, body } = await request(app)
       .post("/resize")
       .field("sizes", [64, 128, 256])
-      .attach("images", join(__dirname, "/assets/space.jpg"));
+      .attach("images", join(__dirname, "/assets/space.jpg")).catch(() => null);
 
     expect(status).toBe(200);
     expect(body.sizes.length).toBeGreaterThan(0);
@@ -24,8 +24,9 @@ describe("resizing images", () => {
         autoPaginate: false,
         delimiter: "/",
         prefix,
-      });
+      }).catch(() => []);
 
+      expect(files).toBeDefined();
       const imageSizes = files.map((file) =>
         Number.parseInt(basename(file.name).replace("w", ""))
       );
@@ -35,7 +36,9 @@ describe("resizing images", () => {
       await bucket.deleteFiles({
         delimiter: "/",
         prefix,
-      });
+      }).catch(() => null);
     }
+
+    done();
   });
 });

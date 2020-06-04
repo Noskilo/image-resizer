@@ -61,16 +61,21 @@ app.post("/resize", upload.array("images", 12), async (req, res) => {
           })
           .toFile(resizedPath);
 
-        return bucket.upload(resizedPath, {
-          destination: resizedLocation + resizedName,
-          gzip: true,
-          contentType: file.mimetype,
-          metadata: {
+        return bucket
+          .upload(resizedPath, {
+            destination: resizedLocation + resizedName,
+            gzip: true,
+            contentType: file.mimetype,
             metadata: {
-              firebaseStorageDownloadTokens: fileId,
+              metadata: {
+                firebaseStorageDownloadTokens: fileId,
+              },
             },
-          },
-        });
+          })
+          .catch((e) => {
+            console.error(e);
+            return {};
+          });
       });
     })
     .reduce((prev, curr) => {
