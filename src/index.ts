@@ -94,5 +94,5 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
 });
 
 app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Image Resizer listening at http://localhost:${port}`)
 );
