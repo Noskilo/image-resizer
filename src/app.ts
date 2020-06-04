@@ -27,7 +27,9 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
     return;
   }
 
-  const sizes = [64, 128, 256, 512];
+  const sizes = req.body.sizes
+    ? req.body.sizes.map((size) => Number.parseInt(size))
+    : [64, 128, 256, 512];
   const images: {
     id: string;
     mimeType: string;

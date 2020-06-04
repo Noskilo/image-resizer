@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app, bucket } from "../src/app";
-import { join } from "path";
+import { join, basename } from "path";
 
 test("bucket is defined", () => {
   expect(process.env.BUCKET).toBeDefined();
@@ -11,6 +11,7 @@ describe("resizing images", () => {
   test("POST request to /images resizes all images", async () => {
     const { status, body } = await request(app)
       .post("/images")
+      .field("sizes", [64, 128, 256])
       .attach("images", join(__dirname, "/assets/space.jpg"));
 
     expect(status).toBe(200);
@@ -25,7 +26,11 @@ describe("resizing images", () => {
         prefix,
       });
 
-      expect(files.length).toBe(body.sizes.length);
+      const imageSizes = files.map((file) =>
+        Number.parseInt(basename(file.name).replace("w", ""))
+      );
+
+      expect(imageSizes.sort()).toEqual(body.sizes.sort());
 
       await bucket.deleteFiles({
         delimiter: "/",
