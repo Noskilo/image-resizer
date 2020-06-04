@@ -4,3 +4,8 @@ before_install:
 language: node_js
 node_js:
   - 10
+script: npm run prepare
+deploy:
+  provider: gae
+  keyfile: client-secret.json
+  project: credible-nation-271214
