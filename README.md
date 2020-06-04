@@ -1,4 +1,5 @@
-﻿# Cloud Storage Image Resizer
+﻿[![Build Status](https://travis-ci.com/Noskilo/image-resizer.svg?branch=master)](https://travis-ci.com/Noskilo/image-resizer)
+# Cloud Storage Image Resizer
 This is an image resizer designed to be deployed as a micro-service on Google Cloud Platform. It listens for POST requests and resizes an array of images storing them in cloud storage.
 
 # Usage
