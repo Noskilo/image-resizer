@@ -7,7 +7,8 @@
     "start": "node ./dist/index.js",
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage --setupFiles dotenv/config",
+    "create-env": "printenv > .env"
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,13 @@
     "@types/multer": "^1.4.3",
     "@types/node": "^14.0.5",
     "@types/sharp": "^0.25.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^26.0.1",
     "nodemon": "^2.0.4",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.1.0",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.3"
   }
