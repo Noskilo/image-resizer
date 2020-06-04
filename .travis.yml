@@ -7,7 +7,7 @@ node_js:
 script:
   - npm run prepare
   - npm test
-before_deploy: "./deploy/create-env.sh"
+before_deploy: "./create-env.sh"
 deploy:
   provider: gae
   project: credible-nation-271214
