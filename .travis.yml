@@ -4,7 +4,9 @@ before_install:
 language: node_js
 node_js:
   - 10
-script: npm run prepare
+script:
+  - npm run prepare
+  - npm test
 deploy:
   provider: gae
   project: credible-nation-271214
