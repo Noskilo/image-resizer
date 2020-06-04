@@ -1,5 +1,5 @@
 ﻿# Cloud Storage Image Resizer
-This is an image resizer designed to be deployed as a microservice on Google Cloud Platform. It listens for POST requests and resizes an array of images storing them in cloud storage.
+This is an image resizer designed to be deployed as a micro-service on Google Cloud Platform. It listens for POST requests and resizes an array of images storing them in cloud storage.
 
 # Usage
 Ready to be deployed to Google App Engine. You can deploy from the terminal using [gcloud](https://cloud.google.com/sdk/docs/quickstarts).
@@ -30,7 +30,7 @@ BUCKET=<BUCKET>
 GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_ADMINSDK_CREDENTIALS>
 ```
 
-You can start a development server to send POST requests to `http://localhost:5000/images`.
+You can start a development server to send POST requests to `http://localhost:5000/resize`.
 ```bash
 npm run dev
 ```
