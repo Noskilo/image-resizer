@@ -83,4 +83,4 @@ app.post("/images", upload.array("images", 12), async (req, res) => {
   });
 });
 
-export { app };
+export { app, bucket };
