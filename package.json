@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Resizes an image to varying widths before committing into a storage bucket",
   "scripts": {
-    "prepare": "npm run build && npm run create-env",
     "start": "node ./dist/index.js",
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc -p .",
-    "test": "jest --coverage --setupFiles dotenv/config",
-    "create-env": "printenv > .env"
+    "test": "jest --coverage --setupFiles dotenv/config"
   },
   "repository": {
     "type": "git",
