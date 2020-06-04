@@ -18,7 +18,7 @@ const upload = multer({ dest: workingDir });
 // Resizes an array of image files from a multipart/form POST request
 // Uploads resized images to GCP storage
 // Responds with sizes and image data
-app.post("/images", upload.array("images", 12), async (req, res) => {
+app.post("/resize", upload.array("images", 12), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     res.send({
       sizes: [],

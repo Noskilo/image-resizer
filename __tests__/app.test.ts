@@ -10,7 +10,7 @@ test("bucket is defined", () => {
 describe("resizing images", () => {
   test("POST request to /images resizes all images", async () => {
     const { status, body } = await request(app)
-      .post("/images")
+      .post("/resize")
       .field("sizes", [64, 128, 256])
       .attach("images", join(__dirname, "/assets/space.jpg"));
 
