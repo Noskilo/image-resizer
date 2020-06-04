@@ -3,4 +3,4 @@ before_install:
   -in client-secret.json.enc -out client-secret.json -d
 language: node_js
 node_js:
-  - 10
+- 10
