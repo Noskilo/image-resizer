@@ -8,17 +8,28 @@ cd ROOT_DIRECTORY
 npm install
 npm run prepare
 ```
-Create `env-variables.yaml` in root directory and define your storage bucket:
+
+## Production
+Create `env-variables.yaml` in root directory and define your Google Cloud Storage bucket:
 ```yaml
 env_variables:
- BUCKET: PROJECT_ID.appspot.com
+ BUCKET: <BUCKET>
 ```
-## Production
+Deploy to Google App Engine by running:
+```bash
+gcloud app deploy
+```
 Make a `multipart/form-data` POST request to `
 https://SERVICE_ID-dot-PROJECT_ID.REGION_ID.appspot.com/images
 `.
 
 ## Local Development
+Make sure you have a `.env` file in the root folder:
+```
+BUCKET=<BUCKET>
+GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_ADMINSDK_CREDENTIALS>
+```
+
 You can start a development server to send POST requests to `http://localhost:5000/images`.
 ```bash
 npm run dev
