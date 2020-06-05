@@ -11,10 +11,9 @@ npm run prepare
 ```
 
 ## Production
-Create `env-variables.yaml` in root directory and define your Google Cloud Storage bucket:
-```yaml
-env_variables:
- BUCKET: <BUCKET>
+Create `.env` in root directory and define your Google Cloud Storage bucket:
+```
+BUCKET=<BUCKET>
 ```
 Deploy to Google App Engine by running:
 ```bash
