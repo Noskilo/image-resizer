@@ -90,4 +90,13 @@ app.post("/resize", upload.array("images", 12), async (req, res) => {
   });
 });
 
+app.use((req, res, next) => {
+  res.status(404).send({
+    message: "Could not find what you're looking for.",
+    routes: {
+      post: ["/resize"],
+    },
+  });
+});
+
 export { app, bucket };
