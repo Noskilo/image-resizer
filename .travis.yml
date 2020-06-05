@@ -6,7 +6,6 @@ node_js:
   - 10
 before_deploy:
   - "./create-env.sh"
-  - cat .env
 deploy:
   provider: gae
   project: credible-nation-271214
