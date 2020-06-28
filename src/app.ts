@@ -6,6 +6,8 @@ import { tmpdir } from "os";
 import { join, parse } from "path";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
+import execa from "execa";
+import gifsicle from "gifsicle";
 
 const gcs = new Storage();
 const bucket = gcs.bucket(process.env.BUCKET);
@@ -55,11 +57,15 @@ app.post("/resize", upload.array("images", 12), async (req, res) => {
         const resizedName = `${size}w`;
         const resizedPath = join(resizeDir, resizedName);
 
-        await sharp(file.path)
-          .resize({
-            width: size,
-          })
-          .toFile(resizedPath);
+        if (file.mimetype.includes("gif")) {
+          await resizeGif(file, size, resizedPath);
+        } else {
+          await sharp(file.path)
+            .resize({
+              width: size,
+            })
+            .toFile(resizedPath);
+        }
 
         return bucket
           .upload(resizedPath, {
@@ -98,5 +104,18 @@ app.use((req, res, next) => {
     },
   });
 });
+
+async function resizeGif(
+  file: Express.Multer.File,
+  size: number,
+  resizedPath: string
+) {
+  await execa(gifsicle, [
+    "-o",
+    resizedPath,
+    file.path,
+    `--resize-fit-width=${size}`,
+  ]);
+}
 
 export { app, bucket };
