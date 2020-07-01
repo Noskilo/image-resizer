@@ -9,7 +9,7 @@ test("bucket is defined", () => {
 
 
 describe("resizing images", () => {
-    test("POST request to /images resizes all images", async (done) => {
+    test("POST request to /resize resizes all images", async (done) => {
 
         await resizeRequest("/assets/space.jpg");
         await resizeRequest("/assets/space-boy.gif");
@@ -20,11 +20,11 @@ describe("resizing images", () => {
 async function resizeRequest(path: string) {
     const { status, body } = await request(app)
         .post("/resize")
-        .field("sizes", [63, 128, 256])
+        .field("sizes", [63, 128])
         .attach("images", join(__dirname, path)).catch(() => null);
 
     expect(status).toBe(200);
-    expect(body.sizes.length).toBe(3);
+    expect(body.sizes.length).toBe(2);
 
     for (const image of body.images) {
         const prefix = image.location;
