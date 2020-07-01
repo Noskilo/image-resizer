@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import execa from "execa";
 import gifsicle from "gifsicle";
 
+console.log("Bucket: ", process.env.BUCKET);
 const gcs = new Storage();
 const bucket = gcs.bucket(process.env.BUCKET);
 
